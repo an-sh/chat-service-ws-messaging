@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "chat-service-ws-messaging",
   "main": "index.js",
-  "private": true,
+  "private": false,
   "engines": {
     "node": ">=0.12.0"
   },
