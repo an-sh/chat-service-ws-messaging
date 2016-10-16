@@ -6,8 +6,6 @@ const Server = require('ws-messaging')
 const assign = require('lodash.assign')
 const { EventEmitter } = require('events')
 
-const emit = EventEmitter.prototype.emit
-
 function run (self, gen) {
   return Promise.coroutine(gen).call(self)
 }
@@ -52,7 +50,6 @@ class Transport {
 
   integrateClient (socket, auth) {
     socket.data.auth = auth
-    socket.on('close', emit.bind(socket, 'disconnect'))
     socket.on('close', () => this.connector.unsubscribeall(socket))
   }
 
@@ -78,6 +75,9 @@ class Transport {
 
   bindHandler (id, name, fn) {
     let socket = this.getSocket(id)
+    if (name === 'disconnect') {
+      socket.on('close', fn)
+    }
     if (socket) {
       socket.register(name, fn)
     }
