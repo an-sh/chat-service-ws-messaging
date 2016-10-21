@@ -5,16 +5,15 @@
   "main": "index.js",
   "private": false,
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=4"
   },
   "scripts": {
     "compile": "babel src --out-dir lib",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "generate-docs": "jsdoc --configure .jsdoc.json --verbose",
     "prepublish": "npm run compile",
-    "pretest-legacy": "npm run compile",
-    "test": "nyc mocha",
-    "test-legacy": "mocha -r babel-register"
+    "pretest": "npm run compile",
+    "test": "nyc mocha"
   },
   "author": "Andrey Sharapov <an.sh.1@yandex.ru> (https://github.com/an-sh)",
   "repository": {
