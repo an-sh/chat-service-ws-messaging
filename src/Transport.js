@@ -75,10 +75,10 @@ class Transport {
 
   bindHandler (id, name, fn) {
     let socket = this.getSocket(id)
-    if (name === 'disconnect') {
-      socket.on('close', fn)
-    }
     if (socket) {
+      if (name === 'disconnect') {
+        socket.on('close', fn)
+      }
       socket.register(name, fn)
     }
   }
