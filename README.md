@@ -15,7 +15,8 @@
 ## Installation
 
 ```sh
-npm i ws-messaging
+npm i chat-service
+npm i chat-service-ws-messaging
 ```
 
 ## Usage
