@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/an-sh/chat-service-ws-messaging/compare/v0.2.1...v0.3.0) (2016-11-29)
+
+
+### Chores
+
+* bump transport versions ([a5a5c5d](https://github.com/an-sh/chat-service-ws-messaging/commit/a5a5c5d))
+* use es2015-node4 preset ([1d70923](https://github.com/an-sh/chat-service-ws-messaging/commit/1d70923))
+
+
+### BREAKING CHANGES
+
+* Possible node 4.x regression due to the preset change.
+* Bump transport versions.
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/an-sh/chat-service-ws-messaging/compare/v0.2.0...v0.2.1) (2016-11-21)
 
