@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/an-sh/chat-service-ws-messaging/compare/v0.3.0...v0.4.0) (2017-01-06)
+
+
+### Chores
+
+* bump transport versions ([8e7f22d](https://github.com/an-sh/chat-service-ws-messaging/commit/8e7f22d))
+
+
+### Code Refactoring
+
+* rename connector to pubsub ([4f08e1c](https://github.com/an-sh/chat-service-ws-messaging/commit/4f08e1c))
+
+
+### BREAKING CHANGES
+
+* Rename connector to pubsub.
+* Bump transport versions.
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/an-sh/chat-service-ws-messaging/compare/v0.2.1...v0.3.0) (2016-11-29)
 
