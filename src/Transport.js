@@ -43,7 +43,7 @@ class Transport {
     this.messagesServer = new Server(wssOptions, serverOptions, socketOptions)
 
     // internal commutation
-    let encoder = this.messagesServer.encodeMessage.bind(this.messagesServer)
+    let encoder = (args) => this.messagesServer.encodeMessage(...args)
     let method = 'sendEncoded'
     pubsubOptions = assign({}, pubsubOptions, {encoder, method})
     this.pubsub = new EmitterPubsubBroker(pubsubOptions)
