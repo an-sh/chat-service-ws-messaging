@@ -30,9 +30,12 @@ class Transport {
   constructor (server, options) {
     this.server = server
     this.options = options
-    let { connectorOptions, wssOptions = {}, serverOptions, socketOptions } =
+    let { connectorOptions = {}, wssOptions = {}, serverOptions = {}, socketOptions = {} } =
           options
     this.ChatServiceError = server.ChatServiceError
+    let encoder = socketOptions.encoder || JSON.stringify
+    let method = 'sendEncoded'
+    connectorOptions = assign({}, connectorOptions, {encoder, method})
     this.connector = new EmitterPubsubBroker(connectorOptions)
     let connectionHook = this.connectionHook.bind(this)
     serverOptions = assign({}, serverOptions, {connectionHook})
@@ -50,7 +53,7 @@ class Transport {
 
   integrateClient (socket, auth) {
     socket.data.auth = auth
-    socket.on('close', () => this.connector.unsubscribeall(socket))
+    socket.on('close', () => this.connector.unsubscribeAll(socket))
   }
 
   connectionHook (socket, auth) {
