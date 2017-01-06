@@ -30,20 +30,25 @@ class Transport {
   constructor (server, options) {
     this.server = server
     this.options = options
-    let { connectorOptions = {}, wssOptions = {}, serverOptions = {}, socketOptions = {} } =
+    let { pubsubOptions = {}, wssOptions = {}, serverOptions = {}, socketOptions = {} } =
           options
     this.ChatServiceError = server.ChatServiceError
-    let encoder = socketOptions.encoder || JSON.stringify
-    let method = 'sendEncoded'
-    connectorOptions = assign({}, connectorOptions, {encoder, method})
-    this.connector = new EmitterPubsubBroker(connectorOptions)
+
+    // client-server commutation
     let connectionHook = this.connectionHook.bind(this)
     serverOptions = assign({}, serverOptions, {connectionHook})
     if (wssOptions.port == null && wssOptions.server == null) {
       wssOptions = assign({}, {port: this.server.port}, wssOptions)
     }
     this.messagesServer = new Server(wssOptions, serverOptions, socketOptions)
-    this.clusterBus = new ClusterBus(this.connector)
+
+    // internal commutation
+    let encoder = this.messagesServer.encodeMessage.bind(this.messagesServer)
+    let method = 'sendEncoded'
+    pubsubOptions = assign({}, pubsubOptions, {encoder, method})
+    this.pubsub = new EmitterPubsubBroker(pubsubOptions)
+    this.clusterBus = new ClusterBus(this.pubsub)
+
     this.closed = true
   }
 
@@ -53,7 +58,7 @@ class Transport {
 
   integrateClient (socket, auth) {
     socket.data.auth = auth
-    socket.on('close', () => this.connector.unsubscribeAll(socket))
+    socket.on('close', () => this.pubsub.unsubscribeAll(socket))
   }
 
   connectionHook (socket, auth) {
@@ -73,7 +78,7 @@ class Transport {
     this.closed = true
     return Promise.resolve()
       .then(() => this.messagesServer.close())
-      .then(() => this.connector.close())
+      .then(() => this.pubsub.close())
   }
 
   bindHandler (id, name, fn) {
@@ -95,15 +100,15 @@ class Transport {
   }
 
   emitToChannel (channel, eventName, ...eventData) {
-    this.connector.publish(channel, eventName, ...eventData)
+    this.pubsub.publish(channel, eventName, ...eventData)
   }
 
   sendToChannel (id, channel, eventName, ...eventData) {
     let socket = this.getSocket(id)
     if (!socket) {
-      this.connector.publish(channel, eventName, ...eventData)
+      this.pubsub.publish(channel, eventName, ...eventData)
     } else {
-      this.connector.send(socket, channel, eventName, ...eventData)
+      this.pubsub.send(socket, channel, eventName, ...eventData)
     }
   }
 
@@ -123,14 +128,14 @@ class Transport {
     if (!socket) {
       return Promise.reject(new this.ChatServiceError('invalidSocket', id))
     } else {
-      return this.connector.subscribe(socket, channel)
+      return this.pubsub.subscribe(socket, channel)
     }
   }
 
   leaveChannel (id, channel) {
     let socket = this.getSocket(id)
     if (!socket) { return Promise.resolve() }
-    return this.connector.unsubscribe(socket, channel)
+    return this.pubsub.unsubscribe(socket, channel)
   }
 
   disconnectSocket (id) {
