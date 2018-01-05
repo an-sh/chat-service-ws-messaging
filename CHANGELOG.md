@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.2"></a>
+## [0.5.2](https://github.com/an-sh/chat-service-ws-messaging/compare/v0.5.1...v0.5.2) (2018-01-05)
+
+
+### Bug Fixes
+
+* remove upgradeReq property ([d0b831a](https://github.com/an-sh/chat-service-ws-messaging/commit/d0b831a))
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/an-sh/chat-service-ws-messaging/compare/v0.5.0...v0.5.1) (2018-01-05)
 
