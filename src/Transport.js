@@ -117,8 +117,6 @@ class Transport {
     let socket = this.getSocket(id)
     if (!socket) { return res }
     res.isConnected = true
-    res.query = socket.socket.upgradeReq.query
-    res.headers = socket.socket.upgradeReq.headers
     res.auth = socket.data.auth
     return res
   }
