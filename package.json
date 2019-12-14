@@ -5,14 +5,11 @@
   "main": "index.js",
   "private": false,
   "engines": {
-    "node": ">=4"
+    "node": ">=10"
   },
   "scripts": {
-    "compile": "babel src --out-dir lib",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "generate-docs": "jsdoc --configure .jsdoc.json --verbose",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
     "test": "nyc mocha"
   },
   "author": "Andrey Sharapov <an.sh.1@yandex.ru> (https://github.com/an-sh)",
@@ -22,18 +19,16 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.4.6",
-    "emitter-pubsub-broker": "^0.6.0",
+    "bluebird": "^3.7.2",
+    "emitter-pubsub-broker": "^1.0.1",
     "lodash.assign": "^4.2.0",
-    "semver": "^5.3.0",
-    "ws-messaging": "^1.0.0"
+    "ws-messaging": "^2.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.16.0",
-    "babel-preset-es2015-node4": "^2.1.0"
+    "standard": "^14.3.1"
   },
   "peerDependencies": {
-    "chat-service": ">= 0.12.0 < 2"
+    "chat-service": ">= 1 < 2"
   },
   "nyc": {
     "include": [

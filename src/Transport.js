@@ -35,17 +35,17 @@ class Transport {
     this.ChatServiceError = server.ChatServiceError
 
     // client-server commutation
-    let connectionHook = this.connectionHook.bind(this)
-    serverOptions = assign({}, serverOptions, {connectionHook})
+    const connectionHook = this.connectionHook.bind(this)
+    serverOptions = assign({}, serverOptions, { connectionHook })
     if (wssOptions.port == null && wssOptions.server == null) {
-      wssOptions = assign({}, {port: this.server.port}, wssOptions)
+      wssOptions = assign({}, { port: this.server.port }, wssOptions)
     }
     this.messagesServer = new Server(wssOptions, serverOptions, socketOptions)
 
     // internal commutation
-    let encoder = (args) => this.messagesServer.encodeMessage(...args)
-    let method = 'sendEncoded'
-    pubsubOptions = assign({}, pubsubOptions, {encoder, method})
+    const encoder = (args) => this.messagesServer.encodeMessage(...args)
+    const method = 'sendEncoded'
+    pubsubOptions = assign({}, pubsubOptions, { encoder, method })
     this.pubsub = new EmitterPubsubBroker(pubsubOptions)
     this.clusterBus = new ClusterBus(this.pubsub)
 
@@ -63,9 +63,9 @@ class Transport {
 
   connectionHook (socket, auth) {
     return run(this, function * () {
-      let id = socket.id
+      const id = socket.id
       this.integrateClient(socket, auth)
-      let [userName, authData = {}] = yield this.server.onConnect(id)
+      const [userName, authData = {}] = yield this.server.onConnect(id)
       if (!userName) {
         return Promise.reject(new this.ChatServiceError('noLogin'))
       }
@@ -82,7 +82,7 @@ class Transport {
   }
 
   bindHandler (id, name, fn) {
-    let socket = this.getSocket(id)
+    const socket = this.getSocket(id)
     if (socket) {
       if (name === 'disconnect') {
         socket.on('close', fn)
@@ -104,7 +104,7 @@ class Transport {
   }
 
   sendToChannel (id, channel, eventName, ...eventData) {
-    let socket = this.getSocket(id)
+    const socket = this.getSocket(id)
     if (!socket) {
       this.pubsub.publish(channel, eventName, ...eventData)
     } else {
@@ -113,8 +113,8 @@ class Transport {
   }
 
   getHandshakeData (id) {
-    let res = { isConnected: false, query: {}, headers: {}, auth: {} }
-    let socket = this.getSocket(id)
+    const res = { isConnected: false, query: {}, headers: {}, auth: {} }
+    const socket = this.getSocket(id)
     if (!socket) { return res }
     res.isConnected = true
     res.auth = socket.data.auth
@@ -122,7 +122,7 @@ class Transport {
   }
 
   joinChannel (id, channel) {
-    let socket = this.getSocket(id)
+    const socket = this.getSocket(id)
     if (!socket) {
       return Promise.reject(new this.ChatServiceError('invalidSocket', id))
     } else {
@@ -131,13 +131,13 @@ class Transport {
   }
 
   leaveChannel (id, channel) {
-    let socket = this.getSocket(id)
+    const socket = this.getSocket(id)
     if (!socket) { return Promise.resolve() }
     return this.pubsub.unsubscribe(socket, channel)
   }
 
   disconnectSocket (id) {
-    let socket = this.getSocket(id)
+    const socket = this.getSocket(id)
     if (!socket) { return Promise.resolve() }
     return socket.close()
   }
